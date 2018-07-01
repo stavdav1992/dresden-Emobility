@@ -1,0 +1,21 @@
+.chargeList{
+  color:blue;
+  height:60vh;
+  overflow-y:scroll;
+  flex:0 auto;
+}
+
+.listTitle{
+  border-bottom: 1px dotted;
+  padding-left: 3vh;
+  padding-bottom: 0px;
+}
+
+.listTitle h3 {
+  font-size:16px;
+}
+
+
+.selected-charger{
+  color:red;
+}
