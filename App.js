@@ -45,6 +45,7 @@ class App extends Component {
   constructor(props){
     super(props);
     this.state = {  test : '',chargersNear:[] ,center:[dresdenCords.lng,dresdenCords.lat], zoom:[8],selected:0};
+    this.handleClickOnList = this.handleClickOnList.bind(this);
   }
 
 
@@ -58,7 +59,7 @@ class App extends Component {
   }
 
    onDragEnd = (evt:any) => {
-    this.setState({selected:0})
+    this.setState({selectedID:0})
     this.getStations(this.state.map.getCenter().lat,this.state.map.getCenter().lng)
     .then(data=> {
     //  console.log("got new data")
@@ -85,8 +86,7 @@ class App extends Component {
   console.log("feature:",feature)
   console.log("setting state:")
   this.setState({selStation:chrgStation})
-  this.setState({selected:feature.feature.properties.id+1}) /*plus 1 um 0 als kein zu bezeichnen */
-  console.log(feature.feature.properties.id)
+  this.setState({selectedID:chrgStation.ID})
 
   }
 
@@ -107,7 +107,11 @@ class App extends Component {
    onToggleHover(cursor: string, { map }: { map: any }) {
    map.getCanvas().style.cursor = cursor;
   }
-
+  handleClickOnList(charger) {
+    console.log("id:"+charger.ID)
+    this.setState({selectedID:charger.ID})
+    this.setState({selStation:charger})
+  }
   render() {
     const {selStation,selected } = this.state;
     return (
@@ -118,7 +122,7 @@ class App extends Component {
         </header>
 
         <div className="map-List">
-          <ChargerList chrgList={this.state.chargersNear} selInd={this.state.selected} /> {/* diplay left*/}
+          <ChargerList chrgList={this.state.chargersNear} selectedID={this.state.selectedID} clickOnList={this.handleClickOnList} /> {/* diplay left*/}
           <div className="mapCont">      {/* diplay right*/}
             <Map
             style="mapbox://styles/mapbox/streets-v8"
@@ -148,7 +152,7 @@ class App extends Component {
                 })
                 }
                 </Layer>}
-                {selected && (
+                {this.state.selectedID && (
                   <Popup key={selStation.id} coordinates={[selStation.AddressInfo.Longitude,selStation.AddressInfo.Latitude]}>
 
                     <MyPopup selStation={this.state.selStation}/>
@@ -156,6 +160,9 @@ class App extends Component {
                   )}
            </Map>
            </div>
+       </div>
+       <div className='footer'>
+        <a href="https://github.com/stavdav1992/dresden-Emobility">Source</a>
        </div>
       </div>
     );

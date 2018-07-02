@@ -5,19 +5,19 @@ class ChargerElement extends Component {
 
   constructor(props){
     super(props);
-    this.handleClick = this.handleClick.bind(this);
-  }
-  handleClick  () {
-    console.log("comp" +this.props.ind +"clicked")
-    this.setState({selected:(this.props.ind+1)})
+    this.handleClick = this.handleClick.bind(this)
   }
 
+  handleClick(){
+    console.log("hello from" +this.props.charger.ID)
+    this.props.setSelectedFromClick(this.props.charger);
+  }
   render(){
     let chargerClass='unselected-charger';
-    if (this.props.selected)
+    if (this.props.selectedID==this.props.charger.ID)
       chargerClass = 'selected-charger'
     return(
-      <div onClick={this.handleClick}>
+      <div className='charger-element' onClick={this.handleClick} >
         <p className={chargerClass} >
           <span>{this.props.charger.ID},</span> <span>{this.props.charger.AddressInfo.Title},</span>
         </p>
@@ -28,21 +28,27 @@ class ChargerElement extends Component {
 
 class ChargerList extends Component{
 
+  constructor(props){
+    super(props);
+
+  }
+
   render(){
+
     return(
       <div className="chargeList">
         <div className="listTitle">
           <h3>Chargers nearby</h3>
         </div>
-        <ul>
-          {this.props.chrgList.map((chrg,i) => {
-            return(
-
-               <ChargerElement charger={chrg}  key={i} ind={i} selected={this.props.selInd==(i+1)}   />
-
+        <div className="list-objects">
+            {this.props.chrgList.map((chrg,i) =>
+                  (
+                  <ChargerElement charger={chrg} key={i}  chargerID={chrg} selectedID={this.props.selectedID} setSelectedFromClick={this.props.clickOnList}    />
+                )
             )
-          })}
-        </ul>
+
+        }
+        </div>
       </div>
     )
   }
